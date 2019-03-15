@@ -1,0 +1,141 @@
+INDEX.PHP
+
+<form method="post" action="ope.php" id="formlogin" name="formlogin" >
+
+<fieldset id="fie">
+<legend>LOGIN </legend> <br />
+<label>NOME : </label>
+
+
+<input type="text" name="login" id="login"  /><br />
+<label>SENHA :</label>
+<input type="password" name="senha" id="senha" /><br />
+
+<input type="submit" value="LOGAR"  />
+
+<section class="recipiente margem-topo-100">
+    <form action="recuperar_por_email.php" method="post" class="coluna">
+      <input type="text" name="recuperar-senha" placeholder="Insira seu email">
+      <button class="icones icone-enviar"></button>
+    </form>
+  </section>
+</fieldset>
+
+</form>
+
+
+
+
+
+
+
+
+OP.PHP
+
+
+
+<?php 
+
+session_start();
+
+$login = $_POST['login'];
+$senha = $_POST['senha'];
+
+$con = mysql_connect("127.0.0.1", "root", "digite a senha do banco aqui") or die
+ ("Sem conexão com o servidor");
+$select = mysql_select_db("server") or die("Sem acesso ao DB, Entre em 
+contato com o Administrador, colocar meu email aqui");
+ 
+$result = mysql_query("SELECT * FROM `USUARIO` 
+WHERE `NOME` = '$login' AND `SENHA`= '$senha'");
+
+if(mysql_num_rows ($result) > 0 )
+{
+$_SESSION['login'] = $login;
+$_SESSION['senha'] = $senha;
+header('location:site.php');
+}
+else{
+  unset ($_SESSION['login']);
+  unset ($_SESSION['senha']);
+  header('location:index.php');
+   
+  }
+?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+SITE.PHP
+
+
+<!DOCTYPE>
+<html> 
+
+<style>
+.Geral {
+    height:120px;
+
+}
+
+#logo {
+    float: left;
+    width: 220px;
+    height: 120px;
+    cursor: pointer;
+    cursor: hand;
+    background-image:url(images/anc.fw.png);
+    background-repeat: no-repeat;
+}
+#superior {
+    float: left;
+    width: 1005px;
+    height: 60px;
+}
+#inferior {
+    float: left;
+    width: 1005px;
+    height: 60px;
+
+}
+
+</style>
+
+<head>
+
+<?php 
+
+session_start();
+if((!isset ($_SESSION['login']) == true) and (!isset ($_SESSION['senha']) == true))
+{
+  unset($_SESSION['login']);
+  unset($_SESSION['senha']);
+  header('location:index.php');
+  }
+ 
+$logado = $_SESSION['login'];
+?>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Escola Politécnica de Saúde Joaquim Venancio</title>
+</head>
+ 
+<body>
+<table width="800" height="748" border="1">
+  <tr>
+    <td height="90" colspan="2" bgcolor="#8B1A1A">
+    <?php
+  echo" Bem vindo $logado";
+  ?>
+    
+</table>
+</body>
+</html>
